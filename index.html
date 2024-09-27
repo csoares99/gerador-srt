@@ -4,25 +4,125 @@
     <meta charset="UTF-8">
     <title>Gerador de Arquivos SRT para CapCut</title>
     <style>
+        /* Estilos Gerais */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
         }
-        textarea, input {
-            width: 100%;
-            margin-bottom: 10px;
+
+        /* Container Principal */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
+
+        /* Cabeçalho */
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* Labels e Inputs */
         label {
             font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 20px;
         }
+
+        textarea, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        /* Botão */
+        button {
+            width: 100%;
+            background-color: #6D3ECA; /* Cor primária roxa */
+            color: #fff;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #5A32A3; /* Tom mais escuro para hover */
+        }
+
+        /* Output */
+        h2 {
+            margin-top: 40px;
+            color: #333;
+            border-bottom: 2px solid #6D3ECA; /* Usando a cor primária */
+            padding-bottom: 10px;
+        }
+
         #output {
             white-space: pre-wrap;
-            background-color: #f4f4f4;
-            padding: 10px;
+            background-color: #f9fafb;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
         }
-        button {
-            padding: 10px;
+
+        /* Link de Download */
+        #output a {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #6D3ECA; /* Cor primária roxa */
+            color: #fff !important;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 4px;
             font-size: 16px;
+        }
+
+        #output a:hover {
+            background-color: #5A32A3; /* Tom mais escuro para hover */
+        }
+
+         /* Emoticon */
+         .emoticon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 30px; /* Espaço após o emoticon */
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            textarea, input[type="number"] {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -30,6 +130,7 @@
 
     <h1>Gerador de Arquivos SRT para CapCut</h1>
 
+    <div class="emoticon">🐺</div>
     <label for="script">Cole seu roteiro aqui:</label>
     <textarea id="script" rows="10"></textarea>
 
