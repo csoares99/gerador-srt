@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Arquivos SRT para CapCut</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea, input {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        #output {
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gerador de Arquivos SRT para CapCut</h1>
+
+    <label for="script">Cole seu roteiro aqui:</label>
+    <textarea id="script" rows="10"></textarea>
+
+    <label for="charLimit">Número máximo de caracteres por segmento:</label>
+    <input type="number" id="charLimit" value="500">
+
+    <button onclick="generateSRT()">Gerar SRT</button>
+
+    <h2>Arquivo SRT Gerado:</h2>
+    <div id="output"></div>
+
+    <script>
+        function generateSRT() {
+            const scriptText = document.getElementById('script').value;
+            const charLimit = parseInt(document.getElementById('charLimit').value);
+            const outputDiv = document.getElementById('output');
+
+            if (!scriptText || !charLimit) {
+                alert('Por favor, insira o roteiro e o limite de caracteres.');
+                return;
+            }
+
+            // Dividir o texto em sentenças
+            const sentences = scriptText.match(/[^.!?\n]+[.!?\n]*/g);
+
+            const segments = [];
+            let currentSegment = '';
+
+            for (let i = 0; i < sentences.length; i++) {
+                const sentence = sentences[i].trim();
+
+                if ((currentSegment + ' ' + sentence).trim().length <= charLimit) {
+                    currentSegment = (currentSegment + ' ' + sentence).trim();
+                } else {
+                    if (currentSegment) {
+                        segments.push(currentSegment);
+                    }
+                    currentSegment = sentence;
+                }
+            }
+
+            if (currentSegment) {
+                segments.push(currentSegment);
+            }
+
+            // Agora, gerar o conteúdo SRT
+            let srtContent = '';
+            let totalTime = 0;
+            const readingSpeed = 13; // Média de caracteres por segundo
+
+            for (let i = 0; i < segments.length; i++) {
+                const segment = segments[i];
+                const startTime = formatTime(totalTime);
+                const duration = segment.length / readingSpeed;
+                totalTime += duration;
+                const endTime = formatTime(totalTime);
+
+                srtContent += `${i + 1}\n${startTime} --> ${endTime}\n${segment}\n\n`;
+            }
+
+            outputDiv.textContent = srtContent;
+
+            // Criar um arquivo para download
+            const blob = new Blob([srtContent], { type: 'text/srt' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'arquivo.srt';
+            link.textContent = 'Clique aqui para baixar o arquivo SRT';
+            outputDiv.appendChild(link);
+        }
+
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            const milliseconds = Math.floor((totalSeconds % 1) * 1000);
+
+            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)},${pad(milliseconds, 3)}`;
+        }
+
+        function pad(num, size = 2) {
+            let s = "000" + num;
+            return s.substr(s.length - size);
+        }
+    </script>
+
+</body>
+</html>
