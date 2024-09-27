@@ -26,7 +26,14 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 10px; /* Ajustado para espaço menor */
+        }
+
+        /* Emoticon */
+        .emoticon {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 30px; /* Espaço após o emoticon */
         }
 
         /* Labels e Inputs */
@@ -102,13 +109,6 @@
             background-color: #5A32A3; /* Tom mais escuro para hover */
         }
 
-         /* Emoticon */
-         .emoticon {
-            text-align: center;
-            font-size: 48px;
-            margin-bottom: 30px; /* Espaço após o emoticon */
-        }
-
         /* Responsividade */
         @media (max-width: 600px) {
             .container {
@@ -128,25 +128,30 @@
 </head>
 <body>
 
-    <h1>Gerador de Arquivos SRT para CapCut</h1>
+    <div class="container">
+        <h1>Gerador de Arquivos SRT para CapCut</h1>
 
-    <div class="emoticon">🐺</div>
-    <label for="script">Cole seu roteiro aqui:</label>
-    <textarea id="script" rows="10"></textarea>
+        <!-- Emoticon do Lobo -->
+        <div class="emoticon">🐺</div>
 
-    <label for="charLimit">Número máximo de caracteres por segmento:</label>
-    <input type="number" id="charLimit" value="500">
+        <label for="script">Cole seu roteiro aqui:</label>
+        <textarea id="script" rows="10" placeholder="Digite ou cole seu roteiro..."></textarea>
 
-    <button onclick="generateSRT()">Gerar SRT</button>
+        <label for="charLimit">Número máximo de caracteres por segmento:</label>
+        <input type="number" id="charLimit" value="500">
 
-    <h2>Arquivo SRT Gerado:</h2>
-    <div id="output"></div>
+        <button onclick="generateSRT()">Gerar SRT</button>
+
+        <h2>Arquivo SRT Gerado:</h2>
+        <div id="output"></div>
+    </div>
 
     <script>
         function generateSRT() {
             const scriptText = document.getElementById('script').value;
             const charLimit = parseInt(document.getElementById('charLimit').value);
             const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Limpar o conteúdo anterior
 
             if (!scriptText || !charLimit) {
                 alert('Por favor, insira o roteiro e o limite de caracteres.');
