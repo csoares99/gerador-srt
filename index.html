@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Gerador de Arquivos SRT para CapCut</title>
+    <title>Ferramenta de Texto</title>
     <style>
         /* Estilos Gerais */
         body {
@@ -22,22 +22,93 @@
             border-radius: 8px;
         }
 
-        /* Cabeçalho */
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px; /* Ajustado para espaço menor */
+        /* Estilos das Abas */
+        .tab {
+            overflow: hidden;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
         }
 
-        /* Emoticon */
-        .emoticon {
-            text-align: center;
-            font-size: 48px;
-            margin-bottom: 30px; /* Espaço após o emoticon */
+        .tab button {
+            background-color: #ddd;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+            border-radius: 4px 4px 0 0;
+            margin-right: 2px;
         }
 
-        /* Labels e Inputs */
-        label {
+        .tab button:hover {
+            background-color: #ccc;
+        }
+
+        .tab button.active {
+            background-color: #6D3ECA;
+            color: white;
+        }
+
+        /* Conteúdo das Abas */
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            background-color: #fff;
+            border-top: none;
+        }
+
+        /* Estilos Específicos para o Divisor de Texto */
+        .divisor-texto textarea, .divisor-texto input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .divisor-texto button {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #6D3ECA;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .divisor-texto button:hover {
+            background-color: #5A32A3;
+        }
+
+        .divisor-texto .resultado {
+            margin-top: 20px;
+        }
+
+        .divisor-texto .parte {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .divisor-texto .parte button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .divisor-texto .copiado {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+        }
+
+        /* Estilos Específicos para o Gerador de SRT */
+        .gerador-srt label {
             font-weight: bold;
             color: #555;
             display: block;
@@ -45,7 +116,7 @@
             margin-top: 20px;
         }
 
-        textarea, input[type="number"] {
+        .gerador-srt textarea, .gerador-srt input[type="number"] {
             width: 100%;
             padding: 12px;
             margin-bottom: 10px;
@@ -55,10 +126,9 @@
             resize: vertical;
         }
 
-        /* Botão */
-        button {
+        .gerador-srt button {
             width: 100%;
-            background-color: #6D3ECA; /* Cor primária roxa */
+            background-color: #6D3ECA;
             color: #fff;
             padding: 15px;
             font-size: 18px;
@@ -68,19 +138,11 @@
             margin-top: 20px;
         }
 
-        button:hover {
-            background-color: #5A32A3; /* Tom mais escuro para hover */
+        .gerador-srt button:hover {
+            background-color: #5A32A3;
         }
 
-        /* Output */
-        h2 {
-            margin-top: 40px;
-            color: #333;
-            border-bottom: 2px solid #6D3ECA; /* Usando a cor primária */
-            padding-bottom: 10px;
-        }
-
-        #output {
+        .gerador-srt #output {
             white-space: pre-wrap;
             background-color: #f9fafb;
             padding: 20px;
@@ -93,11 +155,10 @@
             overflow-y: auto;
         }
 
-        /* Link de Download */
-        #output a {
+        .gerador-srt #output a {
             display: inline-block;
             margin-top: 20px;
-            background-color: #6D3ECA; /* Cor primária roxa */
+            background-color: #6D3ECA;
             color: #fff !important;
             padding: 12px 20px;
             text-decoration: none;
@@ -105,8 +166,8 @@
             font-size: 16px;
         }
 
-        #output a:hover {
-            background-color: #5A32A3; /* Tom mais escuro para hover */
+        .gerador-srt #output a:hover {
+            background-color: #5A32A3;
         }
 
         /* Responsividade */
@@ -115,12 +176,17 @@
                 padding: 20px;
             }
 
-            button {
+            .tab button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .divisor-texto button, .gerador-srt button {
                 font-size: 16px;
                 padding: 12px;
             }
 
-            textarea, input[type="number"] {
+            .divisor-texto textarea, .divisor-texto input, .gerador-srt textarea, .gerador-srt input {
                 font-size: 14px;
             }
         }
@@ -128,100 +194,221 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Gerador de Arquivos SRT para CapCut</h1>
+<div class="container">
+    <h1>Ferramenta de Texto</h1>
 
-        <!-- Emoticon do Lobo -->
-        <div class="emoticon">🐺</div>
-
-        <label for="script">Cole seu roteiro aqui:</label>
-        <textarea id="script" rows="10" placeholder="Digite ou cole seu roteiro..."></textarea>
-
-        <label for="charLimit">Número máximo de caracteres por segmento:</label>
-        <input type="number" id="charLimit" value="500">
-
-        <button onclick="generateSRT()">Gerar SRT</button>
-
-        <h2>Arquivo SRT Gerado:</h2>
-        <div id="output"></div>
+    <!-- Abas -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'DivisorTexto')" id="defaultOpen">Divisor de Texto</button>
+        <button class="tablinks" onclick="openTab(event, 'GeradorSRT')">Gerador de SRT</button>
     </div>
 
-    <script>
-        function generateSRT() {
-            const scriptText = document.getElementById('script').value;
-            const charLimit = parseInt(document.getElementById('charLimit').value);
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = ''; // Limpar o conteúdo anterior
+    <!-- Conteúdo da Aba Divisor de Texto -->
+    <div id="DivisorTexto" class="tabcontent">
+        <div class="divisor-texto">
+            <h2>Divisor de Texto por Caracteres</h2>
+            <textarea id="texto" rows="10" placeholder="Insira seu texto aqui"></textarea>
+            <input type="number" id="limite" placeholder="Quantidade de caracteres por parte">
+            <button onclick="dividirTexto()">Dividir Texto</button>
 
-            if (!scriptText || !charLimit) {
-                alert('Por favor, insira o roteiro e o limite de caracteres.');
-                return;
+            <div class="resultado" id="resultado"></div>
+        </div>
+    </div>
+
+    <!-- Conteúdo da Aba Gerador de SRT -->
+    <div id="GeradorSRT" class="tabcontent">
+        <div class="gerador-srt">
+            <h2>Gerador de Arquivos SRT para CapCut</h2>
+
+            <!-- Emoticon do Lobo -->
+            <div class="emoticon" style="text-align: center; font-size: 48px; margin-bottom: 30px;">🐺</div>
+
+            <label for="script">Cole seu roteiro aqui:</label>
+            <textarea id="script" rows="10" placeholder="Digite ou cole seu roteiro..."></textarea>
+
+            <label for="charLimit">Número máximo de caracteres por segmento:</label>
+            <input type="number" id="charLimit" value="500">
+
+            <button onclick="generateSRT()">Gerar SRT</button>
+
+            <h3>Arquivo SRT Gerado:</h3>
+            <div id="output"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Função para alternar entre as abas
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+
+        // Esconder todas as abas
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Remover a classe "active" dos botões
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Mostrar a aba atual e adicionar a classe "active" ao botão
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Abrir a aba padrão
+    document.getElementById("defaultOpen").click();
+
+    // Funções do Divisor de Texto
+    function dividirTexto() {
+        let texto = document.getElementById('texto').value.trim();
+        let limite = parseInt(document.getElementById('limite').value);
+        let resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.innerHTML = ''; // Limpa resultados anteriores
+
+        if (!texto || !limite) {
+            alert('Por favor, insira o texto e o limite de caracteres.');
+            return;
+        }
+
+        let partes = [];
+        let restante = texto;
+
+        while (restante.length > 0) {
+            if (restante.length <= limite) {
+                partes.push(restante.trim());
+                break;
             }
 
-            // Dividir o texto em sentenças
-            const sentences = scriptText.match(/[^.!?\n]+[.!?\n]*/g);
+            let substr = restante.substring(0, limite + 1);
+            let posicaoPonto = substr.lastIndexOf('.');
 
-            const segments = [];
-            let currentSegment = '';
-
-            for (let i = 0; i < sentences.length; i++) {
-                const sentence = sentences[i].trim();
-
-                if ((currentSegment + ' ' + sentence).trim().length <= charLimit) {
-                    currentSegment = (currentSegment + ' ' + sentence).trim();
-                } else {
-                    if (currentSegment) {
-                        segments.push(currentSegment);
-                    }
-                    currentSegment = sentence;
+            if (posicaoPonto === -1) {
+                posicaoPonto = substr.lastIndexOf(' ');
+                if (posicaoPonto === -1) {
+                    posicaoPonto = limite;
                 }
             }
 
-            if (currentSegment) {
-                segments.push(currentSegment);
+            let parte = restante.substring(0, posicaoPonto + 1).trim();
+            partes.push(parte);
+            restante = restante.substring(posicaoPonto + 1).trim();
+        }
+
+        partes.forEach(function(parte, index) {
+            let div = document.createElement('div');
+            div.className = 'parte';
+
+            let titulo = document.createElement('strong');
+            titulo.innerHTML = 'Parte ' + (index + 1) + ' (' + parte.length + ' caracteres):';
+            div.appendChild(titulo);
+
+            div.appendChild(document.createElement('br'));
+
+            let p = document.createElement('p');
+            p.textContent = parte;
+            div.appendChild(p);
+
+            let copyButton = document.createElement('button');
+            copyButton.textContent = 'Copiar Texto';
+            copyButton.onclick = function() {
+                copyToClipboard(parte, copyButton);
+            };
+            div.appendChild(copyButton);
+
+            resultadoDiv.appendChild(div);
+        });
+    }
+
+    function copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(function() {
+            button.textContent = 'Copiado';
+            button.classList.add('copiado');
+            button.disabled = true; // Desativa o botão após copiar
+        }, function(err) {
+            alert('Falha ao copiar o texto: ' + err);
+        });
+    }
+
+    // Funções do Gerador de SRT
+    function generateSRT() {
+        const scriptText = document.getElementById('script').value;
+        const charLimit = parseInt(document.getElementById('charLimit').value);
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = ''; // Limpar o conteúdo anterior
+
+        if (!scriptText || !charLimit) {
+            alert('Por favor, insira o roteiro e o limite de caracteres.');
+            return;
+        }
+
+        // Dividir o texto em sentenças
+        const sentences = scriptText.match(/[^.!?\n]+[.!?\n]*/g);
+
+        const segments = [];
+        let currentSegment = '';
+
+        for (let i = 0; i < sentences.length; i++) {
+            const sentence = sentences[i].trim();
+
+            if ((currentSegment + ' ' + sentence).trim().length <= charLimit) {
+                currentSegment = (currentSegment + ' ' + sentence).trim();
+            } else {
+                if (currentSegment) {
+                    segments.push(currentSegment);
+                }
+                currentSegment = sentence;
             }
-
-            // Agora, gerar o conteúdo SRT
-            let srtContent = '';
-            let totalTime = 0;
-            const readingSpeed = 13; // Média de caracteres por segundo
-
-            for (let i = 0; i < segments.length; i++) {
-                const segment = segments[i];
-                const startTime = formatTime(totalTime);
-                const duration = segment.length / readingSpeed;
-                totalTime += duration;
-                const endTime = formatTime(totalTime);
-
-                srtContent += `${i + 1}\n${startTime} --> ${endTime}\n${segment}\n\n`;
-            }
-
-            outputDiv.textContent = srtContent;
-
-            // Criar um arquivo para download
-            const blob = new Blob([srtContent], { type: 'text/srt' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'arquivo.srt';
-            link.textContent = 'Clique aqui para baixar o arquivo SRT';
-            outputDiv.appendChild(link);
         }
 
-        function formatTime(totalSeconds) {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = Math.floor(totalSeconds % 60);
-            const milliseconds = Math.floor((totalSeconds % 1) * 1000);
-
-            return `${pad(hours)}:${pad(minutes)}:${pad(seconds)},${pad(milliseconds, 3)}`;
+        if (currentSegment) {
+            segments.push(currentSegment);
         }
 
-        function pad(num, size = 2) {
-            let s = "000" + num;
-            return s.substr(s.length - size);
+        // Agora, gerar o conteúdo SRT
+        let srtContent = '';
+        let totalTime = 0;
+        const readingSpeed = 13; // Média de caracteres por segundo
+
+        for (let i = 0; i < segments.length; i++) {
+            const segment = segments[i];
+            const startTime = formatTime(totalTime);
+            const duration = segment.length / readingSpeed;
+            totalTime += duration;
+            const endTime = formatTime(totalTime);
+
+            srtContent += `${i + 1}\n${startTime} --> ${endTime}\n${segment}\n\n`;
         }
-    </script>
+
+        outputDiv.textContent = srtContent;
+
+        // Criar um arquivo para download
+        const blob = new Blob([srtContent], { type: 'text/srt' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'arquivo.srt';
+        link.textContent = 'Clique aqui para baixar o arquivo SRT';
+        outputDiv.appendChild(link);
+    }
+
+    function formatTime(totalSeconds) {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        const milliseconds = Math.floor((totalSeconds % 1) * 1000);
+
+        return `${pad(hours)}:${pad(minutes)}:${pad(seconds)},${pad(milliseconds, 3)}`;
+    }
+
+    function pad(num, size = 2) {
+        let s = "000" + num;
+        return s.substr(s.length - size);
+    }
+</script>
 
 </body>
 </html>
