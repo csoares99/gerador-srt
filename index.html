@@ -327,7 +327,6 @@
         navigator.clipboard.writeText(text).then(function() {
             button.textContent = 'Copiado';
             button.classList.add('copiado');
-            button.disabled = true; // Desativa o botão após copiar
         }, function(err) {
             alert('Falha ao copiar o texto: ' + err);
         });
